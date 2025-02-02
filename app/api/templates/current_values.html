@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Получить погоду по широте и долготе</h1>
+    <div>
+      <form action="/get_current_values" method="post">
+        <p>
+            <input type="text" id="latitude" name="latitude" placeholder="Широта" value="{{ latitude }}">
+        </p>
+        <p>
+            <input type="text" id="longitude" name="longitude" placeholder="Долгота" value="{{ longitude }}">
+        </p>
+        <input class="submit" type="submit" value="Отправить">
+      </form>
+    </div>
+
+    <div>
+        {% if details %}
+            <div class="container border">
+                <div class="row bg-info border">
+                    <div class="col">
+                        Параметр
+                    </div>
+                    <div class="col bg-info border">
+                        Значение
+                    </div>
+                    <div class="col bg-info border">
+                        Единица измерения
+                    </div>
+                </div>
+                {% for key in details.current %}
+                <div class="row border">
+                    <div class="col">
+                        {{ key }}
+                    </div>
+                    <div class="col">
+                        {{ details.current[key] }}
+                    </div>
+                    <div class="col">
+                        {{ details.current_units[key] }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

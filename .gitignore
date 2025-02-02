@@ -1,0 +1,6 @@
+*.docx
+*.txt
+*.db
+.idea/
+venv/
+__pycache__/

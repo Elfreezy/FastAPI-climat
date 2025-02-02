@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('read_current_values') }}">Задание 1</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('create_city') }}">Задание 2</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('read_all_city') }}">Задание 3</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('get_city_params') }}">Задание 4</a></li>
+            </ol>
+        </nav>
+    </div>
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

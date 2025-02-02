@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>
+        Список городов
+    </h1>
+
+    <div class="container">
+        <div class="row border">
+            <div class="col bg-info "> Наименование города </div>
+            <div class="col bg-info "> Широта </div>
+            <div class="col bg-info "> Долгота </div>
+            <div class="col bg-info "> Погодный код </div>
+            <div class="col bg-info ">  </div>
+        </div>
+
+    {% for item in items %}
+        <div class="row border">
+            <div class="col"> {{ item.city_name }} </div>
+            <div class="col"> {{ item.latitude }} </div>
+            <div class="col"> {{ item.longitude }} </div>
+            <div class="col"> {{ item.weather_code }} </div>
+            <div class="col">
+                <a class="btn btn-danger" href="/delete_city/{{item.id}}">Удалить</a>
+            </div>
+
+        </div>
+
+    {% endfor %}
+    </div>
+
+    <div class="container border mt-5">
+        <div class="row">
+            <h3>Погодный код указывает обобщенную информацию о состоянии</h3>
+            *обновляется каждые 15 минут
+        </div>
+        <div class="row bg-info">
+            <div class="col ">Код</div>
+            <div class="col ">Описание</div>
+        </div>
+        <div class="row border">
+            <div class="col">0</div>
+            <div class="col">Ясное небо</div>
+        </div>
+        <div class="row border">
+            <div class="col">1, 2, 3</div>
+            <div class="col">В основном ясно, переменная облачность и сплошная облачность</div>
+        </div>
+        <div class="row border">
+            <div class="col">45, 48</div>
+            <div class="col">Туман и оседающий изморозь</div>
+        </div>
+        <div class="row border">
+            <div class="col">51, 53, 55</div>
+            <div class="col">Морось: слабая, умеренная и плотная интенсивность</div>
+        </div>
+        <div class="row border">
+            <div class="col">56, 57</div>
+            <div class="col">Замерзающая морось: слабая и плотная интенсивность</div>
+        </div>
+        <div class="row border">
+            <div class="col">61, 63, 65</div>
+            <div class="col">Дождь: слабая, умеренная и сильная интенсивность</div>
+        </div>
+        <div class="row border">
+            <div class="col">66, 67</div>
+            <div class="col">Замерзающий дождь: слабая и сильная интенсивность</div>
+        </div>
+        <div class="row border">
+            <div class="col">71, 73, 75</div>
+            <div class="col">Снегопад: слабая, умеренная и сильная интенсивность</div>
+        </div>
+        <div class="row border">
+            <div class="col">77</div>
+            <div class="col">Снежные зерна</div>
+        </div>
+        <div class="row border">
+            <div class="col">80, 81, 82</div>
+            <div class="col">Ливневые дожди: слабые, умеренные и сильные</div>
+        </div>
+        <div class="row border">
+            <div class="col">85, 86</div>
+            <div class="col">Снежные ливни слабые и сильные</div>
+        </div>
+        <div class="row border">
+            <div class="col">95</div>
+            <div class="col">Гроза: слабая или умеренная</div>
+        </div>
+        <div class="row border">
+            <div class="col">96, 99</div>
+            <div class="col">Гроза с слабым и сильным градом</div>
+        </div>
+    </div>
+{% endblock %}
