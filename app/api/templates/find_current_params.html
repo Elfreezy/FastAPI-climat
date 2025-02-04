@@ -5,7 +5,7 @@
 
     <form action="" method="post">
       <input type="text" required name="city_name" placeholder="Название города" value="{{ city_name }}">
-      <input type="text" required name="req_time" placeholder="Час (0-23)" value="{{ req_time }}">
+      <input type="text" onkeypress='validate_int(event)' required name="req_time" placeholder="Час (0-23)" value="{{ req_time }}">
       <div>
         {% if params %}
           {% for param in params %}

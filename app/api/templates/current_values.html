@@ -5,10 +5,10 @@
     <div>
       <form action="/get_current_values" method="post">
         <p>
-            <input type="text" id="latitude" name="latitude" placeholder="Широта" value="{{ latitude }}">
+            <input type="text" required onkeypress='validate_float(event)' id="latitude" name="latitude" placeholder="Широта" value="{{ latitude }}">
         </p>
         <p>
-            <input type="text" id="longitude" name="longitude" placeholder="Долгота" value="{{ longitude }}">
+            <input type="text" required onkeypress='validate_float(event)' id="longitude" name="longitude" placeholder="Долгота" value="{{ longitude }}">
         </p>
         <input class="submit" type="submit" value="Отправить">
       </form>

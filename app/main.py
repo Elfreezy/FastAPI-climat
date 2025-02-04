@@ -1,7 +1,5 @@
-import asyncio
-from typing import Union
+import uvicorn
 from fastapi import FastAPI
-from pydantic import BaseModel
 from fastapi_utils.tasks import repeat_every
 
 from api.routes import router
@@ -34,4 +32,7 @@ async def start_task():
 @app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 

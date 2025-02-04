@@ -3,11 +3,9 @@ from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates      # jinja2
 
-from .models import User, Calculater, Feedback, Task1Form, CityIn, CityInForm
+from .models import User, MainRequestForm, CityIn, CityInForm
 from .service import req_get_current_values, get_weather_code
 from . import db_manager
-
-
 
 
 router = APIRouter()
@@ -22,15 +20,20 @@ def read_root(request: Request):
 
 
 @router.post('/get_current_values')
-async def get_current_values(request: Request, latitude: str = Form(), longitude: str = Form()):
+async def get_current_values(request: Request):
     context = {}
+    form_data = MainRequestForm(request)
+    await form_data.load_data()
 
-    response = await req_get_current_values(latitude, longitude)
+    if form_data.is_valid():
+        response = await req_get_current_values(form_data.latitude, form_data.longitude)
 
-    context["latitude"] = latitude
-    context["longitude"] = longitude
-    if response is not None:
-        context["details"] = response
+        context["latitude"] = form_data.latitude
+        context["longitude"] = form_data.longitude
+        if response is not None:
+            context["details"] = response
+    else:
+        context["errors"] = form_data.errors
 
     return templates.TemplateResponse(
         request=request, name="current_values.html", context=context
@@ -55,14 +58,26 @@ async def create_city(request: Request):
 
 @router.post("/city/add", response_class=HTMLResponse)
 async def create_city(request: Request):
+    context = {}
     form = CityInForm(request)
     await form.load_data()
-    city = CityIn(city_name=form.city_name, latitude=form.latitude, longitude=form.longitude)
-    city.weather_code = await get_weather_code(latitude=city.latitude, longitude=city.longitude)
 
-    await db_manager.create_city(city)
+    if form.is_valid():
+        city = CityIn(city_name=form.city_name, latitude=form.latitude, longitude=form.longitude)
+        city.weather_code = await get_weather_code(latitude=city.latitude, longitude=city.longitude)
 
-    return RedirectResponse('/all_city', status_code=status.HTTP_303_SEE_OTHER)
+        await db_manager.create_city(city)
+
+        return RedirectResponse('/all_city', status_code=status.HTTP_303_SEE_OTHER)
+    else:
+        context["errors"] = form.errors
+        context["city_name"] = form.city_name
+        context["latitude"] = form.latitude
+        context["longitude"] = form.longitude
+
+    return templates.TemplateResponse(
+        request=request, name="add_city.html", context=context
+    )
 
 
 @router.get("/all_city", response_class=HTMLResponse)
