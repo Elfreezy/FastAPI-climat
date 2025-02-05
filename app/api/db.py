@@ -1,9 +1,8 @@
 import os
-
+from typing import List
 from sqlalchemy import (Column, DateTime, Integer, MetaData, String, Table,
-                        create_engine, ARRAY, Float)
-from sqlalchemy.orm import DeclarativeBase
-
+                        create_engine, ARRAY, Float, ForeignKey)
+from sqlalchemy.orm import Mapped, relationship
 from databases import Database
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -17,9 +16,9 @@ user = Table(
     "user",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("user_name", String(16), nullable=False),
-    Column("email_address", String(60)),
-    Column("nickname", String(50), nullable=False),
+    Column("username", String(16), unique=True, nullable=False),
+    Column("nickname", String(50), nullable=True),
+    Column("password_hash", String(100), nullable=False),
 )
 
 city = Table(
@@ -30,6 +29,10 @@ city = Table(
     Column("latitude", Float),
     Column("longitude", Float),
     Column("weather_code", Integer),
+    Column("user_id", ForeignKey(user.c.id)),
 )
 
 database = Database(DATABASE_URI)
+
+
+

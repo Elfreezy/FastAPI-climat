@@ -4,7 +4,7 @@
     <h1>Получить параметры по наблюдаемому городу на текущий момент</h1>
 
     <form action="" method="post">
-      <input type="text" required name="city_name" placeholder="Название города" value="{{ city_name }}">
+      <input type="text" name="city_name" placeholder="Название города" value="{{ city_name }}">
       <input type="text" onkeypress='validate_int(event)' required name="req_time" placeholder="Час (0-23)" value="{{ req_time }}">
       <div>
         {% if params %}

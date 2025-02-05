@@ -3,10 +3,9 @@ from fastapi import Request
 from typing import Optional, Annotated, List
 
 
-class User(BaseModel):
-    id: int
-    age: int
-    name: str
+class UserIn(BaseModel):
+    username: str
+    password: str
 
 
 class MainRequestForm:

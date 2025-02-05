@@ -1,0 +1,14 @@
+{% extends "base.html "%}
+
+{% block content %}
+    <h1>Регистрация пользователя</h1>
+
+    <form action="" method="post">
+        <input type="text" required name="username" placeholder="Логин">
+        <input type="password" required name="password" placeholder="Пароль">
+
+        <p>
+            <input class="submit mt-3" type="submit" value="Отправить">
+        </p>
+    </form>
+{% endblock %}

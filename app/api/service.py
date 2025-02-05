@@ -1,10 +1,13 @@
 import httpx
+import ssl
 import asyncio
 
 from . import db_manager
 from .models import CityIn
 
 URL = 'https://api.open-meteo.com/v1/forecast'
+# ctx = ssl.create_default_context()
+# ctx.load_cert_chain(certfile="path/to/client.pem")
 
 
 async def req_get_current_values(latitude, longitude, req_values=None, hourly=False):
@@ -22,7 +25,7 @@ async def req_get_current_values(latitude, longitude, req_values=None, hourly=Fa
               "forecast_days": 1,
               type_params: req_values}
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(verify=False) as client:
         response = await client.get(URL, params=params)
 
         return response.json()
