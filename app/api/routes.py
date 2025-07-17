@@ -12,7 +12,7 @@ from . import db_manager
 
 
 router = APIRouter()
-templates = Jinja2Templates(directory="api/templates")
+templates = Jinja2Templates(directory="app/api/templates")
 
 
 @router.get('/')
@@ -160,7 +160,7 @@ async def register(request: Request):
 @router.post("/register")
 async def register(request: Request, username: str = Form(), password: str = Form()):
     errors = []
-    if db_manager.get_user_by_name(username):
+    if await db_manager.get_user_by_name(username):
         errors.append(f"Пользователь {username} уже существует")
     else:
         try:

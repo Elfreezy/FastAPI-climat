@@ -3,9 +3,9 @@ import ssl
 from fastapi import FastAPI
 from fastapi_utils.tasks import repeat_every
 
-from api.routes import router
-from api.db import metadata, database, engine
-from api.service import update_weather_codes
+from .api.routes import router
+from .api.db import metadata, database, engine
+from .api.service import update_weather_codes
 
 metadata.create_all(engine)
 
