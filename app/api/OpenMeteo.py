@@ -23,21 +23,24 @@ class OpenMeteo():
         'forecast_days': forecast_days,
         'current_weather': 'true' if current_weather else 'false',
         }
-
+        response_json = None
         try:
             async with httpx.AsyncClient(verify=False) as client:
                 response = await client.get(url, params=params)
-                response = response.json()
+                response_json = response.json()
 
-                if response.get('current_weather') is not None:
-                    response["value_description_ru"] = {}
-                    for key, value in response.get('current_weather').items():
-                        if hasattr(ParamsDescRu, key.upper()):
-                            response["value_description_ru"][key] = getattr(ParamsDescRu, key.upper())
-                        else:
-                            response["value_description_ru"][key] = value
-
-                return response
+                await self.get_params_description(response_json)
         except Exception as e:
             print(e)
-            return {"errors": ["Превышено время ожидания сервиса"]}
+            response_json["errors"] = ["Превышено время ожидания сервиса"]
+        
+        return response_json
+        
+    async def get_params_description(self, response_json):
+        if response_json.get('current_weather') is not None:
+            response_json["value_description_ru"] = {}
+            for key, value in response_json.get('current_weather').items():
+                if hasattr(ParamsDescRu, key.upper()):
+                    response_json["value_description_ru"][key] = getattr(ParamsDescRu, key.upper())
+                else:
+                    response_json["value_description_ru"][key] = value
