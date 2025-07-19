@@ -10,7 +10,8 @@ from .service import req_get_current_values, get_weather_code
 from .login import authenticate_user, create_jwt_token, get_current_user
 from . import db_manager
 from .OpenMeteo import OpenMeteo
-
+from .OpenMeteoParams import CurrentParams
+from .Exceptions import CustomError
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/api/templates")
@@ -72,18 +73,24 @@ async def create_city(request: Request):
     await form.load_data()
 
     if form.is_valid():
-        city = CityIn(city_name=form.city_name, latitude=form.latitude, longitude=form.longitude)
-        city.weather_code = await get_weather_code(latitude=city.latitude, longitude=city.longitude)
-
         token = request.cookies.get('access_token')
         user = None
 
         if token:
             user = await get_current_user(request.cookies.get('access_token'))
+        if user:
+            city = CityIn(city_name=form.city_name, latitude=form.latitude, longitude=form.longitude)
+            # city.weather_code = await get_weather_code(latitude=city.latitude, longitude=city.longitude)
+            open_meteo = OpenMeteo()
+            response = await open_meteo.forecast(latitude=city.latitude, longitude=city.longitude, current=[CurrentParams.WEATHERCODE])
+            
+            if response.get("current") is not None and response.get("current").get("weathercode") is not None:
+                city.weather_code = response.get("current").get("weathercode")
 
-        await db_manager.create_city(city, user.id)
-
-        return RedirectResponse('/all_city', status_code=status.HTTP_303_SEE_OTHER)
+            await db_manager.create_city(city, user.id)
+            return RedirectResponse('/all_city', status_code=status.HTTP_303_SEE_OTHER)
+        else:
+            context["errors"] = [CustomError.NeedLogin]
     else:
         context["errors"] = form.errors
         context["city_name"] = form.city_name

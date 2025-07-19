@@ -2,4 +2,4 @@
 *.db
 .idea/
 venv/
-__*
+__pycache__

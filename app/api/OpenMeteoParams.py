@@ -10,6 +10,14 @@ class Params(StrEnum):
     LATITUDE            = 'latitude'
     LONGITUDE           = 'longitude'
 
+class CurrentParams(StrEnum):
+    TEMPERATURE_2M      = 'temperature_2m'
+    PRESSURE_MSL        = 'pressure_msl'
+    SURFACE_PRESSURE    = 'surface_pressure'
+    TEMPERATURE         = 'temperature'
+    WINDSPEED           = 'windspeed'
+    WINDDIRECTION       = 'winddirection'
+    WEATHERCODE        = 'weathercode'
 
 class ParamsDescRu(StrEnum):
     TEMPERATURE_2M      = 'Температура воздуха на высоте 2 метров над землей'

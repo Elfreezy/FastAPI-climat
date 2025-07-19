@@ -24,10 +24,8 @@ async def get_user_by_name(username: str):
 
 async def create_city(payload: CityIn, user_id: int = None):
     dict_query = payload.dict()
-    print(payload.dict())
     if user_id:
         dict_query["user_id"] = user_id
-    print(dict_query)
     query = city.insert().values(**dict_query)
 
     return await database.execute(query=query)
@@ -38,8 +36,8 @@ async def read_city(id: int):
     return await database.fetch_one(query=query)
 
 
-async def update_city(id: int, payload: CityIn):
-    query = city.update().where(city.c.id == id).values(**payload.dict())
+async def update_city(id: int, payload: dict):
+    query = city.update().where(city.c.id == id).values(**payload)
     return await database.execute(query=query)
 
 
@@ -50,11 +48,11 @@ async def delete_city(id: int):
 
 
 async def get_all_city():
-    query = city.select().where(city.c.user_id==None)
+    query = city.select()
     return await database.fetch_all(query=query)
 
 
-async def get_all_city_by_id(user_id: int):
+async def get_all_city_by_user_id(user_id: int):
     query = city.select().where(city.c.user_id==user_id)
     return await database.fetch_all(query=query)
 

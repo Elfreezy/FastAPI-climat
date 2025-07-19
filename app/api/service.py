@@ -4,6 +4,8 @@ import asyncio
 
 from . import db_manager
 from .models import CityIn
+from .OpenMeteo import OpenMeteo
+from .OpenMeteoParams import CurrentParams
 
 URL = 'http://api.open-meteo.com/v1/forecast'
 # ctx = ssl.create_default_context()
@@ -44,11 +46,11 @@ async def update_weather_codes() -> None:
     cities = await db_manager.get_all_city()
 
     for line in cities:
-        city = CityIn(city_name=line.city_name,
-                      latitude=line.latitude,
-                      longitude=line.longitude,
-                      weather_code=line.weather_code)
+        open_meteo = OpenMeteo()
+        response = await open_meteo.forecast(latitude=line.latitude, longitude=line.longitude, current=[CurrentParams.WEATHERCODE])
 
-        city.weather_code = await get_weather_code(city.latitude, city.longitude)
+        if response is not None and response.get("current") is not None and response.get("current").get("weathercode") is not None:
+            new_weather_code = response.get("current").get("weathercode")
 
-        await db_manager.update_city(line.id, city)
+            if new_weather_code != line.weather_code:
+                await db_manager.update_city(line.id, {'weather_code': new_weather_code})
