@@ -22,22 +22,28 @@
                         Параметр
                     </div>
                     <div class="col bg-info border">
+                        Описание
+                    </div>
+                    <div class="col bg-info border">
                         Значение
                     </div>
                     <div class="col bg-info border">
                         Единица измерения
                     </div>
                 </div>
-                {% for key in details.current %}
+                {% for key in details.current_weather %}
                 <div class="row border">
                     <div class="col">
                         {{ key }}
                     </div>
                     <div class="col">
-                        {{ details.current[key] }}
+                        {{ details.value_description_ru[key] }}
                     </div>
                     <div class="col">
-                        {{ details.current_units[key] }}
+                        {{ details.current_weather[key] }}
+                    </div>
+                    <div class="col">
+                        {{ details.current_weather_units[key] }}
                     </div>
                 </div>
                 {% endfor %}

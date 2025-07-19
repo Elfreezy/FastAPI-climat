@@ -9,6 +9,7 @@ from .models import UserIn, MainRequestForm, CityIn, CityInForm
 from .service import req_get_current_values, get_weather_code
 from .login import authenticate_user, create_jwt_token, get_current_user
 from . import db_manager
+from .OpenMeteo import OpenMeteo
 
 
 router = APIRouter()
@@ -29,12 +30,17 @@ async def get_current_values(request: Request):
     await form_data.load_data()
 
     if form_data.is_valid():
-        response = await req_get_current_values(form_data.latitude, form_data.longitude)
+        # response = await req_get_current_values(form_data.latitude, form_data.longitude)
+        open_meteo = OpenMeteo()
+        response = await open_meteo.forecast(latitude=form_data.latitude, longitude=form_data.longitude, current_weather=True)
 
         context["latitude"] = form_data.latitude
         context["longitude"] = form_data.longitude
         if response is not None:
-            context["details"] = response
+            if response.get("errors") is None:
+                context["details"] = response
+            else:
+                context["errors"] = response.get("errors")
     else:
         context["errors"] = form_data.errors
 

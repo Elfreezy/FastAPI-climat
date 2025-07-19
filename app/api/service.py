@@ -5,7 +5,7 @@ import asyncio
 from . import db_manager
 from .models import CityIn
 
-URL = 'https://api.open-meteo.com/v1/forecast'
+URL = 'http://api.open-meteo.com/v1/forecast'
 # ctx = ssl.create_default_context()
 # ctx.load_cert_chain(certfile="path/to/client.pem")
 
