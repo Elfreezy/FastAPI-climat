@@ -1,23 +1,22 @@
 from enum import StrEnum
 
-class Params(StrEnum):
-    TEMPERATURE_2M      = 'temperature_2m'
-    PRESSURE_MSL        = 'pressure_msl'
-    SURFACE_PRESSURE    = 'surface_pressure'
-    WIND_SPEED_10M      = 'wind_speed_10m'
-    WEATHER_CODE        = 'weather_code'
-    FORECAST_DAYS       = 'forecast_days'
-    LATITUDE            = 'latitude'
-    LONGITUDE           = 'longitude'
-
 class CurrentParams(StrEnum):
-    TEMPERATURE_2M      = 'temperature_2m'
+    TEMPERATURE         = 'temperature'
     PRESSURE_MSL        = 'pressure_msl'
     SURFACE_PRESSURE    = 'surface_pressure'
-    TEMPERATURE         = 'temperature'
     WINDSPEED           = 'windspeed'
-    WINDDIRECTION       = 'winddirection'
-    WEATHERCODE        = 'weathercode'
+    WEATHERCODE         = 'weathercode'
+
+class HourlyParams(StrEnum):
+    TEMPERATURE         = 'temperature'
+    PRESSURE_MSL        = 'pressure_msl'
+    SURFACE_PRESSURE    = 'surface_pressure'
+    WINDSPEED           = 'windspeed'
+    WEATHERCODE         = 'weathercode'
+    RAIN                = 'rain'
+    SHOWERS             = 'showers'
+    VISIBILITY          = 'visibility'
+
 
 class ParamsDescRu(StrEnum):
     TEMPERATURE_2M      = 'Температура воздуха на высоте 2 метров над землей'
@@ -35,3 +34,6 @@ class ParamsDescRu(StrEnum):
     WINDDIRECTION       = 'Направление ветра'
     IS_DAY              = 'Сейчас день (0/1 - нет/да)'
     WEATHERCODE         = 'Погодный код'
+    RAIN                = 'Дождь'
+    SHOWERS             = 'Ливни'
+    VISIBILITY          = 'Видимость'

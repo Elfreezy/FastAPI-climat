@@ -1,7 +1,7 @@
 import httpx
 import asyncio
 
-from .OpenMeteoParams import Params, CurrentParams, ParamsDescRu
+from .OpenMeteoParams import CurrentParams, HourlyParams, ParamsDescRu
 
 
 class OpenMeteo():
@@ -28,6 +28,7 @@ class OpenMeteo():
         forecast_days: int = 1,
         current_weather: bool = False, # Получить значения параметров на текущий момент
         current: list[CurrentParams] | None = None,
+        hourly: list[HourlyParams] | None = None,
         daily: list | None = None,
         ):
         url = 'http://api.open-meteo.com/v1/forecast'
@@ -37,9 +38,11 @@ class OpenMeteo():
         'longitude': longitude, 
         'forecast_days': forecast_days,
         'current_weather': 'true' if current_weather else 'false',
-        'current': ','.join(current) if current is not None else []
+        'current': ','.join(current) if current is not None else [],
+        'hourly': ','.join(hourly) if hourly is not None else [],
+        'daily': ','.join(daily) if daily is not None else [],
         }
-
+        
         data = await self.request(url, params)
         return data
         

@@ -6,11 +6,10 @@ from fastapi.templating import Jinja2Templates      # jinja2
 from pydantic.error_wrappers import ValidationError
 
 from .models import UserIn, MainRequestForm, CityIn, CityInForm
-from .service import req_get_current_values, get_weather_code
 from .login import authenticate_user, create_jwt_token, get_current_user
 from . import db_manager
 from .OpenMeteo import OpenMeteo
-from .OpenMeteoParams import CurrentParams
+from .OpenMeteoParams import CurrentParams, HourlyParams, ParamsDescRu
 from .Exceptions import CustomError
 
 router = APIRouter()
@@ -112,7 +111,7 @@ async def read_all_city(request: Request):
         user = await get_current_user(token)
 
     if user:
-        all_city = await db_manager.get_all_city_by_id(user_id=user.id)
+        all_city = await db_manager.get_all_city_by_user_id(user_id=user.id)
     else:
         all_city = await db_manager.get_all_city()
 
@@ -133,8 +132,15 @@ async def delete_city(request: Request, id: int):
 
 @router.get("/get_params", response_class=HTMLResponse)
 async def get_city_params(request: Request):
-    params = ['temperature_2m', 'pressure_msl', 'surface_pressure', 'wind_speed_10m', 'weather_code']
-    context = {"params": params}
+    context = {}
+    context["params"] = [param.value for param in HourlyParams]
+
+    # Добавление описания параметров
+    params_desc = {}
+    for param in context["params"]:
+        params_desc[param] = getattr(ParamsDescRu, param.upper()).value
+
+    context["params_desc"] = params_desc
 
     return templates.TemplateResponse(
         request=request, name="find_current_params.html", context=context
@@ -153,12 +159,34 @@ async def get_city_params(request: Request, city_name: str = Form(), req_time: i
 
     city = await db_manager.get_city_by_name(**query_params)
     if city is not None:
-        response = await req_get_current_values(city.latitude, city.longitude, params, hourly=True)
-        context["city_name"] = city.city_name
-        context["details"] = response
+        open_meteo = OpenMeteo()
 
-    params = ['temperature_2m', 'pressure_msl', 'surface_pressure', 'wind_speed_10m', 'weather_code']
-    context["params"] = params
+        # Если пользователь не выбирает параметры, передаются все возможные
+        if params is None:
+            params = [param for param in HourlyParams]
+
+        response = await open_meteo.forecast(latitude=city.latitude, longitude=city.longitude, hourly=params)
+        context["city_name"] = city.city_name
+
+        if response:
+            context["details"] = response
+    else:
+        context["errors"] = [CustomError.CityNotFound]
+
+    context["params"] = [param.value for param in HourlyParams]
+
+    # Добавление описания параметров
+    params_desc = {}
+
+    for param in context["params"]:
+        params_desc[param] = getattr(ParamsDescRu, param.upper()).value
+
+    # Добавление описания для вернувшихся параметров
+    if context.get("details") and context.get("details").get("hourly_units"):
+        for param in context.get("details").get("hourly_units"):
+            params_desc[param] = getattr(ParamsDescRu, param.upper()).value
+
+    context["params_desc"] = params_desc
 
     return templates.TemplateResponse(
         request=request, name="find_current_params.html", context=context
