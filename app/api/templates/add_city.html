@@ -4,9 +4,9 @@
     <h1>Добавить город</h1>
 
     <form action="" method="post">
-        <input type="text" required name="city_name" placeholder="Название города">
-        <input type="text" required name="latitude" placeholder="Широта">
-        <input type="text" required name="longitude" placeholder="Долгота">
+        <input type="text" required name="city_name" placeholder="Название города" value="{{ city_name }}">
+        <input type="text" required name="latitude" placeholder="Широта" value="{{ latitude }}">
+        <input type="text" required name="longitude" placeholder="Долгота" value="{{ longitude }}">
 
         <p>
             <input class="submit mt-3" type="submit" value="Отправить">

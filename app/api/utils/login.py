@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from werkzeug.security import check_password_hash
 
 from .db import database
-from .db_manager import get_user_by_name
+from ..models.DataBaseManager import DataBaseManager
 
 
 router = APIRouter()
@@ -23,7 +23,7 @@ async def create_jwt_token(data: dict):
 
 
 async def authenticate_user(username: str, password: str):
-    user = await get_user_by_name(username=username)
+    user = await DataBaseManager.get_user_by_name(username=username)
 
     if not user:
         return False
@@ -60,7 +60,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     username = payload.get("sub")
 
     if username:
-        user = await get_user_by_name(username=username)
+        user = await DataBaseManager.get_user_by_name(username=username)
         return user
 
     return None

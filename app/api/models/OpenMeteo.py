@@ -1,5 +1,4 @@
 import httpx
-import asyncio
 
 from .OpenMeteoParams import CurrentParams, HourlyParams, ParamsDescRu
 

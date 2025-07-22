@@ -5,9 +5,9 @@ from fastapi_utils.tasks import repeat_every
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from contextlib import asynccontextmanager
 
-from .api.routes import router
-from .api.db import metadata, database, engine
-from .api.service import update_weather_codes
+from .api.controller.routes import router
+from .api.utils.db import metadata, database, engine
+from .api.utils.service import update_weather_codes
 
 metadata.create_all(engine)
 

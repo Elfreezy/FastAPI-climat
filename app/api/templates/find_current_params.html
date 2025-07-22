@@ -37,7 +37,7 @@
                 {% else %}
                   <div class="col">{{ key }}</div>
                 {% endif %}
-                <div class="col">{{ details.hourly[key][req_time] }}</div>
+                <div class="col">{{ details.hourly[key] }}</div>
                 <div class="col">{{ details.hourly_units[key] }}</div>
             </div>
         {% endfor %}

@@ -4,3 +4,4 @@ class CustomError(StrEnum):
     UserNotFound = "Пользователь не найден"
     NeedLogin = "Необходимо авторизоваться"
     CityNotFound = "Город не найден"
+    RequiredFieldIsEmpty = "Обязательные поля не заполнены"
